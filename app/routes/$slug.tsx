@@ -1,5 +1,5 @@
 import { json, type LoaderFunctionArgs } from "@remix-run/node";
-import { useLoaderData, useRouteLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import { prisma } from "@/lib/db.server";
 import themeComponents from "@/themes/index";
 

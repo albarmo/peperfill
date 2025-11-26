@@ -1,18 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Sparkles, 
-  Zap, 
-  BarChart3, 
-  ArrowRight, 
-  Smile, 
-  Check, 
-  Palette, 
-  Share2, 
+import { useState } from 'react';
+import {
+  Sparkles,
+  Zap,
+  BarChart3,
+  ArrowRight,
+  Smile,
+  Check,
+  Palette,
+  Share2,
   MousePointer2,
-  Menu,
-  X,
-  Heart,
+  LayoutTemplate,
+  Sliders,
+  Puzzle,
+  Globe,
+  MessageSquare
 } from 'lucide-react';
+import Navbar from '@/ui/layouts/Navbar';
+import Footer from '@/ui/layouts/Footer';
 
 interface Mood {
   icon: string;
@@ -32,30 +36,31 @@ const DemoForm: React.FC = () => {
   };
 
   const moods: Mood[] = [
-    { icon: '🤩', label: 'Amazing', color: 'bg-yellow-100 hover:bg-yellow-200 border-yellow-300' },
-    { icon: '😌', label: 'Chill', color: 'bg-blue-100 hover:bg-blue-200 border-blue-300' },
+    { icon: '🤩', label: 'Amazing', color: 'bg-amber-100 hover:bg-amber-200 border-amber-300' },
+    { icon: '😌', label: 'Chill', color: 'bg-stone-100 hover:bg-stone-200 border-stone-300' },
     { icon: '🫠', label: 'Melting', color: 'bg-orange-100 hover:bg-orange-200 border-orange-300' },
     { icon: '😤', label: 'Busy', color: 'bg-red-100 hover:bg-red-200 border-red-300' }
   ];
 
   return (
     <div className="relative w-full max-w-md mx-auto">
-      {/* Decorative floating elements */}
-      <div className="absolute -top-12 -left-12 w-24 h-24 bg-purple-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
-      <div className="absolute -bottom-12 -right-12 w-24 h-24 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse delay-75"></div>
+      {/* Decorative floating elements - Subtle watercolor style */}
+      <div className="absolute -top-8 -left-8 w-32 h-32 bg-orange-200/40 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-pulse"></div>
+      <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-stone-300/40 rounded-full mix-blend-multiply filter blur-2xl opacity-60 animate-pulse delay-75"></div>
 
-      <div className="relative bg-white/90 backdrop-blur-xl border border-white/50 shadow-2xl rounded-3xl overflow-hidden transition-all duration-500 min-h-[400px] flex flex-col">
-        {/* Header of the mini-app */}
-        <div className="h-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 w-full"></div>
-        <div className="p-6 flex-1 flex flex-col justify-center">
-          
+      {/* Main Card - Paper Style */}
+      <div className="relative bg-[#fffdf9] border border-stone-200 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-xl overflow-hidden transition-all duration-500 min-h-[400px] flex flex-col">
+        {/* Header of the mini-app - Ink Line */}
+        <div className="h-1 bg-stone-900 w-full"></div>
+        <div className="p-8 flex-1 flex flex-col justify-center">
+
           {step === 0 && (
             <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-4 shadow-sm">
-                <Sparkles size={24} />
+              <div className="w-12 h-12 bg-stone-100 rounded-lg border border-stone-200 flex items-center justify-center text-stone-700 mb-4">
+                <Sparkles size={20} strokeWidth={1.5} />
               </div>
-              <h3 className="text-2xl font-bold text-slate-800">Let's get started! <br/>What should we call you?</h3>
-              <form onSubmit={handleNameSubmit} className="relative">
+              <h3 className="text-3xl font-serif font-bold text-stone-900 tracking-tight">Let's get started. <br />What is your name?</h3>
+              <form onSubmit={handleNameSubmit} className="relative mt-8">
                 <input
                   type="text"
                   value={name}
@@ -63,39 +68,38 @@ const DemoForm: React.FC = () => {
                     setName(e.target.value);
                     setIsTyping(e.target.value.length > 0);
                   }}
-                  placeholder="Type your name..."
-                  className="w-full text-lg px-0 py-4 border-b-2 border-slate-200 focus:border-purple-500 outline-none bg-transparent transition-colors placeholder:text-slate-300"
+                  placeholder="Type your name here..."
+                  className="w-full font-serif text-2xl px-0 py-4 border-b-2 border-stone-200 focus:border-stone-900 outline-none bg-transparent transition-colors placeholder:text-stone-300 placeholder:italic text-stone-800"
                   autoFocus
                 />
-                <button 
+                <button
                   type="submit"
                   disabled={!name.trim()}
-                  className={`absolute right-0 top-3 p-2 rounded-full transition-all duration-300 ${
-                    name.trim() 
-                      ? 'bg-purple-600 text-white translate-x-0 opacity-100 rotate-0' 
-                      : 'bg-slate-200 text-slate-400 translate-x-4 opacity-0 -rotate-45'
-                  }`}
+                  className={`absolute right-0 top-4 p-2 rounded-full transition-all duration-300 ${name.trim()
+                      ? 'bg-stone-900 text-white translate-x-0 opacity-100 rotate-0'
+                      : 'bg-stone-100 text-stone-300 translate-x-4 opacity-0 -rotate-45'
+                    }`}
                 >
                   <ArrowRight size={20} />
                 </button>
               </form>
-              <p className="text-sm text-slate-400">Press Enter ↵</p>
+              <p className="text-xs font-mono uppercase tracking-widest text-stone-400 mt-4">Press Enter ↵</p>
             </div>
           )}
 
           {step === 1 && (
-            <div className="space-y-6 animate-in fade-in slide-in-from-right-8 duration-500">
-              <div className="flex items-center gap-3 text-slate-500 mb-2">
-                <button onClick={() => setStep(0)} className="hover:text-purple-600 transition-colors">
+            <div className="space-y-8 animate-in fade-in slide-in-from-right-8 duration-500">
+              <div className="flex items-center gap-3 text-stone-400 mb-2">
+                <button onClick={() => setStep(0)} className="hover:text-stone-800 transition-colors">
                   <ArrowRight size={16} className="rotate-180" />
                 </button>
-                <span className="text-sm font-medium uppercase tracking-wide">Question 2 of 2</span>
+                <span className="text-xs font-mono uppercase tracking-widest">Question 2 of 2</span>
               </div>
-              <h3 className="text-2xl font-bold text-slate-800">
-                Hi <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">{name}</span>! 👋 <br/>
-                How's the vibe today?
+              <h3 className="text-3xl font-serif font-bold text-stone-900 leading-tight">
+                Hi <span className="underline decoration-wavy decoration-orange-300 decoration-2 underline-offset-4">{name}</span>. <br />
+                How's the vibe?
               </h3>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 {moods.map((m) => (
                   <button
                     key={m.label}
@@ -103,10 +107,10 @@ const DemoForm: React.FC = () => {
                       setMood(m);
                       setStep(2);
                     }}
-                    className={`p-4 rounded-xl border-2 text-left transition-all hover:scale-[1.02] active:scale-95 ${m.color} bg-opacity-30 border-opacity-20 hover:border-opacity-100 hover:shadow-md`}
+                    className={`p-4 rounded-lg border text-left transition-all hover:-translate-y-0.5 active:translate-y-0 active:scale-95 ${m.color} bg-opacity-40 border-stone-200 hover:border-stone-400 hover:shadow-sm`}
                   >
-                    <div className="text-2xl mb-1">{m.icon}</div>
-                    <div className="font-semibold text-slate-700">{m.label}</div>
+                    <div className="text-2xl mb-2 grayscale opacity-90">{m.icon}</div>
+                    <div className="font-serif font-medium text-stone-800">{m.label}</div>
                   </button>
                 ))}
               </div>
@@ -114,31 +118,34 @@ const DemoForm: React.FC = () => {
           )}
 
           {step === 2 && (
-            <div className="text-center space-y-6 animate-in zoom-in duration-500 py-8">
-              <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-green-600 mx-auto animate-bounce shadow-green-200 shadow-lg">
-                <Check size={40} strokeWidth={3} />
+            <div className="text-center space-y-8 animate-in zoom-in duration-500 py-8">
+              <div className="w-20 h-20 bg-stone-100 border border-stone-200 rounded-full flex items-center justify-center text-stone-800 mx-auto">
+                <Check size={32} strokeWidth={2} />
               </div>
               <div>
-                <h3 className="text-3xl font-bold text-slate-800 mb-2">You're all set!</h3>
-                <p className="text-slate-500 text-lg">Thanks for remixing with us.</p>
+                <h3 className="text-3xl font-serif font-bold text-stone-900 mb-3">All done.</h3>
+                <p className="text-stone-500 text-lg font-serif italic">Thanks for filling this out.</p>
               </div>
-              <div className="bg-slate-50 p-4 rounded-2xl inline-block border border-slate-100">
-                <p className="text-sm text-slate-500">Captured Data Preview:</p>
-                <div className="text-left mt-2 font-mono text-xs text-slate-600 bg-white p-3 rounded-lg border border-slate-200 shadow-sm">
+              <div className="bg-stone-50 p-6 rounded-lg inline-block border border-dashed border-stone-300 relative">
+                {/* Paper clip visual */}
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-3 h-8 border-2 border-stone-300 rounded-full bg-stone-50 z-10"></div>
+
+                <p className="text-xs font-mono text-stone-400 uppercase tracking-widest mb-3">Data Captured</p>
+                <div className="text-left font-mono text-xs text-stone-600">
                   {`{`}
-                  <br/>&nbsp;&nbsp;"name": "{name}",
-                  <br/>&nbsp;&nbsp;"vibe": "{mood?.label}"
-                  <br/>{`}`}
+                  <br />&nbsp;&nbsp;"name": "{name}",
+                  <br />&nbsp;&nbsp;"vibe": "{mood?.label}"
+                  <br />{`}`}
                 </div>
               </div>
               <div>
-                <button 
+                <button
                   onClick={() => {
                     setStep(0);
                     setName('');
                     setMood(null);
                   }}
-                  className="text-purple-600 font-semibold hover:underline text-sm"
+                  className="text-stone-900 font-semibold border-b border-stone-900 hover:border-transparent transition-colors text-sm"
                 >
                   Start Over
                 </button>
@@ -147,11 +154,11 @@ const DemoForm: React.FC = () => {
           )}
 
         </div>
-        
-        {/* Fake progress bar */}
-        <div className="h-1 bg-slate-100 w-full mt-auto">
-          <div 
-            className="h-full bg-purple-500 transition-all duration-500 ease-out"
+
+        {/* Progress bar - Pencil Style */}
+        <div className="h-1.5 bg-stone-100 w-full mt-auto border-t border-stone-200">
+          <div
+            className="h-full bg-stone-800 transition-all duration-500 ease-out"
             style={{ width: `${step === 0 ? 33 : step === 1 ? 66 : 100}%` }}
           ></div>
         </div>
@@ -160,279 +167,243 @@ const DemoForm: React.FC = () => {
   );
 };
 
-interface FeatureCardProps {
-  icon: React.ElementType;
+interface FeatureSectionProps {
+  id?: string;
   title: string;
+  subtitle: string;
   desc: string;
-  color: string;
+  icon: React.ElementType;
+  align: 'left' | 'right';
+  children?: React.ReactNode;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, desc, color }) => (
-  <div className="group p-8 bg-white rounded-[2rem] border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300 hover:-translate-y-1">
-    <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3 ${color}`}>
-      <Icon size={28} className="text-white" />
+const FeatureSection: React.FC<FeatureSectionProps> = ({ id, title, subtitle, desc, icon: Icon, align, children }) => (
+  <div id={id} className="py-24">
+    <div className={`max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-16 items-center ${align === 'right' ? 'md:grid-flow-col-dense' : ''}`}>
+      <div className={align === 'right' ? 'md:col-start-2' : ''}>
+        <div className="inline-flex items-center gap-2 text-stone-500 font-mono text-xs uppercase tracking-widest mb-6">
+          <Icon size={16} />
+          {subtitle}
+        </div>
+        <h2 className="text-4xl lg:text-5xl font-serif font-bold text-stone-900 mb-6 leading-tight">{title}</h2>
+        <p className="text-xl text-stone-600 leading-relaxed font-light mb-8">{desc}</p>
+        <button className="text-stone-900 font-bold border-b-2 border-stone-900 hover:text-orange-600 hover:border-orange-600 transition-colors pb-1">
+          Learn more &rarr;
+        </button>
+      </div>
+      <div className={`relative ${align === 'right' ? 'md:col-start-1' : ''}`}>
+        {/* Abstract Paper Representation of Feature */}
+        <div className="relative bg-white border border-stone-200 shadow-[8px_8px_0px_0px_rgba(231,229,228,1)] p-8 min-h-[400px] flex items-center justify-center rotate-1 hover:rotate-0 transition-transform duration-500">
+          {children ? children : (
+            <div className="text-stone-300">Visual Placeholder</div>
+          )}
+          {/* Corner Tape */}
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-8 bg-orange-100/50 rotate-2 border-l border-r border-white/50"></div>
+        </div>
+      </div>
     </div>
-    <h3 className="text-xl font-bold text-slate-800 mb-3">{title}</h3>
-    <p className="text-slate-500 leading-relaxed">{desc}</p>
   </div>
 );
 
 const App: React.FC = () => {
-  const [scrolled, setScrolled] = useState<boolean>(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
-
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  const indexNavLinks = [
+    { name: "Solutions", href: "/#features" },
+    { name: "Templates", href: "/#templates" },
+    { name: "Resources", href: "/#resources" },
+  ];
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans selection:bg-purple-200 selection:text-purple-900 overflow-x-hidden">
-      
-      {/* Navbar */}
-      <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-6'}`}>
-        <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple-600 to-pink-500 rounded-lg flex items-center justify-center text-white font-bold">P</div>
-            <span className="text-xl font-bold tracking-tight text-slate-900">PaperFill</span>
-          </div>
+    <div className="min-h-screen bg-[#fdfbf7] font-sans selection:bg-orange-200 selection:text-orange-900 overflow-x-hidden text-stone-800">
+      {/* Noise Texture Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.4] z-0 mix-blend-multiply"
+        style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E")` }}>
+      </div>
 
-          <div className="hidden md:flex items-center gap-8">
-            <a href="#features" className="text-slate-600 hover:text-purple-600 font-medium transition-colors">Features</a>
-            <a href="#templates" className="text-slate-600 hover:text-purple-600 font-medium transition-colors">Templates</a>
-            <a href="#pricing" className="text-slate-600 hover:text-purple-600 font-medium transition-colors">Pricing</a>
-          </div>
+      <div className="relative z-10">
+        <Navbar />
 
-          <div className="hidden md:flex items-center gap-4">
-            <button className="text-slate-600 font-medium hover:text-purple-600 px-4 py-2">Log in</button>
-            <button className="bg-slate-900 text-white px-6 py-2.5 rounded-full font-medium hover:bg-slate-800 hover:shadow-lg transition-all active:scale-95">
-              Get Started
-            </button>
-          </div>
+        {/* Hero Section */}
+        <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
+            <div className="relative z-10 text-center lg:text-left">
+              <h1 className="text-5xl lg:text-7xl font-serif font-medium text-stone-900 leading-[1.1] mb-6 tracking-tight">
+                Ask nicely. <br />
+                <span className="italic relative inline-block">
+                  <span className="relative z-10">Get more data.</span>
+                  <span className="absolute bottom-2 left-0 w-full h-4 bg-orange-200/60 -rotate-1 -z-0"></span>
+                </span>
+              </h1>
 
-          <button className="md:hidden text-slate-800" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
-          </button>
-        </div>
-      </nav>
+              <p className="text-xl text-stone-600 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed font-light">
+                Build forms, quizzes, and surveys that people actually enjoy answering. Turn a list of questions into a conversation and watch your completion rates soar.
+              </p>
 
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-white pt-24 px-6 md:hidden animate-in slide-in-from-top-10">
-          <div className="flex flex-col gap-6 text-xl font-medium text-slate-800">
-            <a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
-            <a href="#templates" onClick={() => setMobileMenuOpen(false)}>Templates</a>
-            <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-            <hr className="border-slate-100" />
-            <button className="bg-slate-900 text-white py-4 rounded-xl w-full">Sign Up Free</button>
-          </div>
-        </div>
-      )}
-
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 overflow-hidden">
-        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
-          
-          <div className="relative z-10 text-center lg:text-left">
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-50 text-purple-700 font-medium text-sm mb-8 border border-purple-100 animate-in fade-in slide-in-from-bottom-4 duration-700">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
-              </span>
-              v2.0 is live: Now with AI magic
-            </div>
-            
-            <h1 className="text-5xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
-              Forms that actually bring <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 via-pink-500 to-orange-500">joy.</span>
-            </h1>
-            
-            <p className="text-xl text-slate-500 mb-10 max-w-xl mx-auto lg:mx-0 leading-relaxed">
-              Stop boring your users. Create conversational, interactive forms that feel like a chat and convert like magic. No coding required.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="bg-slate-900 text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-800 hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2 group">
-                Start Building <ArrowRight className="group-hover:translate-x-1 transition-transform" />
-              </button>
-              <button className="bg-white text-slate-700 border border-slate-200 px-8 py-4 rounded-full font-bold text-lg hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
-                <Zap size={20} className="text-yellow-500 fill-yellow-500" /> See Templates
-              </button>
-            </div>
-
-            <div className="mt-10 flex items-center justify-center lg:justify-start gap-4 text-sm text-slate-500 font-medium">
-              <div className="flex -space-x-3">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="w-8 h-8 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
-                    <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i*123}`} alt="User" />
-                  </div>
-                ))}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <button className="bg-stone-900 text-[#fdfbf7] px-8 py-4 rounded-none font-bold text-lg border border-stone-900 hover:bg-white hover:text-stone-900 transition-all flex items-center justify-center gap-2 group shadow-[4px_4px_0px_0px_rgba(28,25,23,0.2)]">
+                  Start for free <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+                <button className="bg-transparent text-stone-800 border border-stone-300 px-8 py-4 rounded-none font-bold text-lg hover:bg-stone-50 transition-all flex items-center justify-center gap-2 hover:border-stone-900">
+                  <Zap size={20} strokeWidth={1.5} /> View Gallery
+                </button>
               </div>
-              <p>Loved by 10,000+ creators</p>
+              <p className="mt-4 text-xs font-mono text-stone-400 uppercase tracking-widest">No credit card required • Unlimited time</p>
+            </div>
+
+            <div className="relative z-10 perspective-1000">
+              <DemoForm />
             </div>
           </div>
+        </section>
 
-          <div className="relative z-10 perspective-1000">
-             {/* The Interactive Demo Component */}
-             <DemoForm />
-             
-             {/* Background Blob behind form */}
-             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] bg-gradient-to-tr from-purple-200/50 via-pink-200/50 to-orange-100/50 rounded-full blur-3xl -z-10"></div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* Social Proof */}
-      <section className="py-10 border-y border-slate-100 bg-white">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <p className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-8">Powering next-gen teams</p>
-          <div className="flex flex-wrap justify-center gap-x-12 gap-y-8 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-             {/* Mock Logos */}
-             {['Acme Corp', 'GlobalBank', 'Nebula', 'FoxRun', 'Circle'].map((logo) => (
-               <span key={logo} className="text-2xl font-bold font-serif text-slate-800">{logo}</span>
-             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Bento Grid Features */}
-      <section id="features" className="py-24 px-6 bg-slate-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-20">
-            <h2 className="text-4xl font-bold text-slate-900 mb-6">More than just a form builder.</h2>
-            <p className="text-xl text-slate-500">
-              We took everything you hate about traditional data collection and threw it out the window. 
-              Say hello to the future.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard 
-              icon={Palette} 
-              color="bg-pink-500"
-              title="Theme Engine" 
-              desc="Don't look like everyone else. Customize every pixel, font, and animation to match your brand perfectly." 
-            />
-            <FeatureCard 
-              icon={MousePointer2} 
-              color="bg-purple-600"
-              title="Logic Jumps" 
-              desc="Create personalized paths. Show or hide questions based on previous answers instantly." 
-            />
-            <FeatureCard 
-              icon={BarChart3} 
-              color="bg-orange-500"
-              title="Real-time Analytics" 
-              desc="Watch responses roll in live. Visualize data with beautiful charts that are actually useful." 
-            />
-            <FeatureCard 
-              icon={Share2} 
-              color="bg-blue-500"
-              title="Embed Anywhere" 
-              desc="Notion, Webflow, React, or plain HTML. Drop your remix anywhere with a simple copy-paste." 
-            />
-            <FeatureCard 
-              icon={Smile} 
-              color="bg-green-500"
-              title="Human Design" 
-              desc="One question at a time. It feels like a conversation, reducing drop-off rates by up to 40%." 
-            />
-            <FeatureCard 
-              icon={Zap} 
-              color="bg-yellow-500"
-              title="Instant Integrations" 
-              desc="Send data to Slack, Sheets, Zapier, or your own webhook in milliseconds." 
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* Interactive CTA Section */}
-      <section className="py-24 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-slate-900"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 to-slate-900"></div>
-        {/* Animated grid background */}
-        <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '30px 30px' }}></div>
-
-        <div className="max-w-4xl mx-auto relative z-10 text-center">
-          <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 tracking-tight">
-            Ready to make data <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">delightful?</span>
-          </h2>
-          <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
-            Join thousands of creators making the internet a little less boring. 
-            No credit card required.
-          </p>
-          
-          <div className="bg-white/10 backdrop-blur-md p-2 rounded-full inline-flex items-center max-w-md w-full border border-white/10 mb-8 hover:bg-white/15 transition-colors">
-            <input 
-              type="email" 
-              placeholder="Enter your email..." 
-              className="bg-transparent border-none outline-none text-white placeholder:text-slate-400 px-6 py-3 flex-1 w-full"
-            />
-            <button className="bg-white text-slate-900 px-8 py-3 rounded-full font-bold hover:bg-purple-50 transition-colors flex items-center gap-2">
-              Start Free <ArrowRight size={18} />
-            </button>
-          </div>
-          
-          <p className="text-sm text-slate-500">Free forever for personal use. Upgrade when you grow.</p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-slate-50 pt-20 pb-10 px-6 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-10 mb-16">
-          <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center text-white font-bold">P</div>
-              <span className="text-xl font-bold text-slate-900">PaperFill</span>
+        {/* Social Proof */}
+        <section className="py-12 border-y border-stone-200 bg-[#faf8f4]">
+          <div className="max-w-7xl mx-auto px-6 text-center">
+            <p className="text-xs font-mono font-bold text-stone-400 uppercase tracking-widest mb-8">Trusted by the world's best teams</p>
+            <div className="flex flex-wrap justify-center gap-x-12 gap-y-8 opacity-60 grayscale mix-blend-multiply">
+              {['Mailchimp', 'Hermès', 'Airbnb', 'Notion', 'Slack'].map((logo) => (
+                <span key={logo} className="text-3xl font-serif font-bold text-stone-800 tracking-tighter italic">{logo}</span>
+              ))}
             </div>
-            <p className="text-slate-500 text-sm leading-relaxed">
-              Making the web interactive, one form at a time. Crafted with <Heart size={12} className="inline text-red-500 fill-red-500" /> in the cloud.
+          </div>
+        </section>
+
+        {/* Feature 1: The Experience */}
+        <FeatureSection
+          id="features"
+          align="left"
+          icon={LayoutTemplate}
+          subtitle="The Experience"
+          title="Ditch the wall of text."
+          desc="Traditional forms are boring and overwhelming. PaperFill shows one question at a time, making the experience feel like a friendly chat. This simple change keeps people engaged and boosts completion rates."
+        >
+          <div className="space-y-4 w-full max-w-sm">
+            <div className="p-4 bg-stone-50 border border-stone-200 rounded text-stone-400 text-sm">Question 1...</div>
+            <div className="p-6 bg-white border border-stone-900 rounded shadow-md transform scale-105 z-10">
+              <div className="font-serif font-bold text-lg text-stone-900 mb-2">What inspires you?</div>
+              <div className="h-8 bg-stone-100 rounded w-full"></div>
+            </div>
+            <div className="p-4 bg-stone-50 border border-stone-200 rounded text-stone-400 text-sm">Question 3...</div>
+          </div>
+        </FeatureSection>
+
+        {/* Feature 2: Logic */}
+        <FeatureSection
+          align="right"
+          icon={Sliders}
+          subtitle="Conditional Logic"
+          title="Make it personal with Logic."
+          desc="Don't ask questions that don't apply. Use Logic Jumps to show different questions based on previous answers. It's like a choose-your-own-adventure book, but for your data collection."
+        >
+          <div className="relative w-full max-w-sm h-64 flex items-center justify-center">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-white border border-stone-800 p-3 rounded shadow-sm z-10">Option A</div>
+            <div className="absolute bottom-10 left-10 bg-white border border-stone-200 p-3 rounded text-stone-400">Path 1</div>
+            <div className="absolute bottom-10 right-10 bg-white border border-stone-200 p-3 rounded text-stone-400">Path 2</div>
+
+            {/* Connector lines SVG */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ zIndex: 0 }}>
+              <path d="M192 40 L192 100 L80 100 L80 180" fill="none" stroke="#a8a29e" strokeWidth="2" strokeDasharray="5,5" />
+              <path d="M192 40 L192 100 L300 100 L300 180" fill="none" stroke="#a8a29e" strokeWidth="2" strokeDasharray="5,5" />
+            </svg>
+          </div>
+        </FeatureSection>
+
+        {/* Feature 3: Design */}
+        <FeatureSection
+          align="left"
+          icon={Palette}
+          subtitle="Brand Kit"
+          title="Look good. Stay on brand."
+          desc="You don't need to be a designer to create beautiful forms. Choose from our gallery of handcrafted paper textures, fonts, and layouts, or upload your own assets to match your brand identity perfectly."
+        >
+          <div className="grid grid-cols-2 gap-4 w-full max-w-xs">
+            <div className="aspect-square bg-[#f5f5dc] border border-stone-200 rounded-full flex items-center justify-center font-serif italic text-stone-600">Cream</div>
+            <div className="aspect-square bg-stone-800 border border-stone-600 rounded-full flex items-center justify-center font-serif italic text-white">Ink</div>
+            <div className="aspect-square bg-orange-100 border border-orange-200 rounded-full flex items-center justify-center font-serif italic text-orange-800">Clay</div>
+            <div className="aspect-square bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-stone-200 border border-stone-300 rounded-full flex items-center justify-center font-serif italic text-stone-700">Grid</div>
+          </div>
+        </FeatureSection>
+
+        {/* Templates Grid Section */}
+        <section id="templates" className="py-24 px-6 bg-[#f5f3ef]">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-serif font-bold text-stone-900 mb-4">Get a head start.</h2>
+              <p className="text-stone-600">Choose a template and make it yours in minutes.</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { title: 'Feedback Form', icon: MessageSquare },
+                { title: 'Registration', icon: MousePointer2 },
+                { title: 'Application', icon: LayoutTemplate },
+                { title: 'Research Survey', icon: BarChart3 },
+                { title: 'Lead Capture', icon: Zap },
+                { title: 'Quiz', icon: Smile },
+                { title: 'Order Form', icon: Share2 },
+                { title: 'Event RSVP', icon: Globe }
+              ].map((template) => (
+                <div key={template.title} className="group bg-white p-6 border border-stone-200 hover:border-stone-900 transition-all cursor-pointer">
+                  <template.icon className="text-stone-400 group-hover:text-orange-500 mb-4 transition-colors" size={24} />
+                  <h3 className="font-serif font-bold text-lg text-stone-900 group-hover:underline decoration-1 underline-offset-4">{template.title}</h3>
+                  <p className="text-sm text-stone-500 mt-2">Start with this &rarr;</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Integrations Section */}
+        <section id="resources" className="py-24 px-6">
+          <div className="max-w-5xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 text-stone-500 font-mono text-xs uppercase tracking-widest mb-6">
+              <Puzzle size={16} />
+              Connect
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-serif font-bold text-stone-900 mb-8">Play nice with your favorites.</h2>
+            <p className="text-xl text-stone-600 font-light mb-12 max-w-2xl mx-auto">
+              Connect PaperFill with 500+ of your favorite tools. Send data to Slack, create cards in Trello, or update rows in Google Sheets automatically.
             </p>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              {['Slack', 'Google Sheets', 'HubSpot', 'Notion', 'Zapier', 'Airtable', 'Mailchimp', 'Salesforce'].map(tool => (
+                <div key={tool} className="px-6 py-3 bg-white border border-stone-200 rounded-full font-serif text-stone-600 shadow-sm">
+                  {tool}
+                </div>
+              ))}
+              <div className="px-6 py-3 bg-stone-100 border border-stone-200 rounded-full font-serif text-stone-400 border-dashed">
+                + 500 more
+              </div>
+            </div>
           </div>
-          
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6">Product</h4>
-            <ul className="space-y-4 text-slate-500 text-sm">
-              <li><a href="#" className="hover:text-purple-600">Templates</a></li>
-              <li><a href="#" className="hover:text-purple-600">Integrations</a></li>
-              <li><a href="#" className="hover:text-purple-600">Enterprise</a></li>
-              <li><a href="#" className="hover:text-purple-600">Changelog</a></li>
-            </ul>
+        </section>
+
+        {/* Interactive CTA Section */}
+        <section className="py-24 px-6 relative overflow-hidden border-t border-stone-200 bg-stone-900 text-[#fdfbf7]">
+          {/* Background Texture for CTA */}
+          <div className="absolute inset-0 opacity-10"
+            style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3C/g%3E%3C/svg%3E")` }}>
           </div>
 
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6">Resources</h4>
-            <ul className="space-y-4 text-slate-500 text-sm">
-              <li><a href="#" className="hover:text-purple-600">Community</a></li>
-              <li><a href="#" className="hover:text-purple-600">Help Center</a></li>
-              <li><a href="#" className="hover:text-purple-600">API Docs</a></li>
-              <li><a href="#" className="hover:text-purple-600">Status</a></li>
-            </ul>
-          </div>
+          <div className="max-w-4xl mx-auto relative z-10 text-center">
+            <h2 className="text-4xl md:text-6xl font-serif font-medium mb-8 tracking-tight">
+              There's a better way <br />to ask.
+            </h2>
+            <p className="text-xl text-stone-400 mb-10 max-w-2xl mx-auto font-light">
+              You don't need to be technical. You don't need a designer. <br />You just need PaperFill.
+            </p>
 
-          <div>
-            <h4 className="font-bold text-slate-900 mb-6">Company</h4>
-            <ul className="space-y-4 text-slate-500 text-sm">
-              <li><a href="#" className="hover:text-purple-600">About</a></li>
-              <li><a href="#" className="hover:text-purple-600">Careers</a></li>
-              <li><a href="#" className="hover:text-purple-600">Blog</a></li>
-              <li><a href="#" className="hover:text-purple-600">Legal</a></li>
-            </ul>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <button className="bg-[#fdfbf7] text-stone-900 px-8 py-4 font-bold text-lg hover:bg-orange-100 transition-colors">
+                Sign up for free
+              </button>
+            </div>
+
+            <p className="text-sm text-stone-500 font-mono mt-8">No credit card required</p>
           </div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center pt-8 border-t border-slate-200 text-sm text-slate-400">
-          <p>© 2024 PaperFill Inc. All rights reserved.</p>
-          <div className="flex gap-6 mt-4 md:mt-0">
-            <a href="#" className="hover:text-slate-600">Privacy</a>
-            <a href="#" className="hover:text-slate-600">Terms</a>
-            <a href="#" className="hover:text-slate-600">Twitter</a>
-          </div>
-        </div>
-      </footer>
+        </section>
+        {/* Footer */}
+        <Footer />
+      </div>
     </div>
   );
 };

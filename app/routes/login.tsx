@@ -1,203 +1,183 @@
-import type { MetaFunction, ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
-import { Link, Form, useActionData, useLoaderData } from "@remix-run/react";
-import { ArrowLeft } from "lucide-react";
-import { json, redirect, createCookie } from "@remix-run/node";
-import { login } from "./api/auth";
+import React, { useState } from 'react';
+import { 
+  ArrowRight, 
+  Eye, 
+  EyeOff, 
+  Sparkles,
+  Command,
+  Github} from 'lucide-react';
 
-const sessionCookie = createCookie("session", {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
-  maxAge: 60 * 60 * 24 * 7,
-});
+const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-export const meta: MetaFunction = () => {
-  return [
-    { title: "Masuk - Pestaria" },
-    {
-      name: "description",
-      content: "Masuk ke akun Pestaria Anda untuk mengelola undangan digital.",
-    },
-  ];
-};
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || !password) return;
+    
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1500);
+  };
 
-export async function loader({ request }: LoaderFunctionArgs) {
-  const url = new URL(request.url);
-  const registered = url.searchParams.get("registered");
-  const reset = url.searchParams.get("reset");
-  const forgotPasswordSent = url.searchParams.get("forgot_password");
-
-  let successMessage: string | null = null;
-  if (registered) successMessage = "Registrasi berhasil! Silakan masuk ke akun Anda.";
-  if (reset === "success") successMessage = "Kata sandi berhasil diatur ulang! Silakan masuk dengan kata sandi baru Anda.";
-  if (forgotPasswordSent === "sent") successMessage = "Instruksi untuk mengatur ulang kata sandi telah dikirim ke email Anda.";
-
-
-  return json({ successMessage });
-}
-
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData();
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-
-  if (!email || !password) {
-    return json({ error: "Email dan Password harus diisi." }, { status: 400 });
-  }
-
-  let token: string;
-  try {
-    token = await login({ email, password });
-  } catch (error: any) {
-    return json(
-      { error: error.message || "Terjadi kesalahan saat login." },
-      { status: 401 }
-    );
-  }
-
-  return redirect("/dashboard", {
-    headers: { "Set-Cookie": await sessionCookie.serialize(token) },
-  });
-}
-
-export default function LoginPage() {
-  const { successMessage } = useLoaderData<typeof loader>();
   return (
-    <div className="bg-slate-100 font-sans text-slate-800 antialiased min-h-screen flex flex-col">
-      <AuthNavbar />
+    <div className="min-h-screen bg-[#fdfbf7] font-sans selection:bg-orange-200 selection:text-orange-900 flex overflow-hidden">
+      {/* Noise Texture Overlay */}
+      <div className="fixed inset-0 pointer-events-none opacity-[0.4] z-0 mix-blend-multiply" 
+           style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.5'/%3E%3C/svg%3E")` }}>
+      </div>
 
-      <main className="flex-grow flex items-center justify-center py-12 px-4">
-        <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-          <h1 className="text-3xl font-bold text-center text-slate-900 mb-8">
-            Masuk ke Akun Anda
-          </h1>
-          {successMessage && (
-            <div
-              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 text-sm"
-              role="alert"
-            >
-              <span className="block sm:inline">{successMessage}</span>
+      <div className="relative z-10 w-full flex flex-col md:flex-row">
+        
+        {/* Left Panel: Brand & Art (Hidden on mobile) */}
+        <div className="hidden md:flex w-1/2 lg:w-[45%] bg-[#f5f3ef] border-r border-stone-200 relative flex-col p-12 justify-between overflow-hidden">
+          {/* Decorative Pattern Background */}
+          <div className="absolute inset-0 opacity-[0.03]" 
+               style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")` }}>
+          </div>
+
+          {/* Logo */}
+          <div className="flex items-center gap-3 relative z-10">
+            <div className="w-8 h-8 bg-stone-900 rounded-none flex items-center justify-center text-[#fdfbf7] font-serif font-bold border border-stone-900">P</div>
+            <span className="text-xl font-serif font-bold tracking-tight text-stone-900">PaperFill</span>
+          </div>
+
+          {/* Abstract Art Composition */}
+          <div className="relative z-10 my-auto">
+            <div className="relative w-full max-w-md mx-auto aspect-square">
+               {/* Paper Sheet 1 */}
+               <div className="absolute top-0 right-0 w-3/4 h-3/4 bg-white border border-stone-200 shadow-lg rotate-3 p-6 flex flex-col">
+                  <div className="w-12 h-12 rounded-full bg-orange-100 border border-orange-200 mb-4 flex items-center justify-center text-orange-600">
+                    <Sparkles size={24} />
+                  </div>
+                  <div className="space-y-3">
+                    <div className="h-2 w-full bg-stone-100 rounded"></div>
+                    <div className="h-2 w-5/6 bg-stone-100 rounded"></div>
+                    <div className="h-2 w-4/6 bg-stone-100 rounded"></div>
+                  </div>
+                  {/* Tape */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-16 h-8 bg-yellow-100/80 -rotate-2 border-l border-r border-white/50"></div>
+               </div>
+
+               {/* Paper Sheet 2 */}
+               <div className="absolute bottom-8 left-0 w-2/3 h-2/3 bg-stone-900 border border-stone-800 shadow-xl -rotate-2 p-6 flex flex-col justify-between text-[#fdfbf7]">
+                  <div className="font-serif text-2xl italic">"Simplicity is the ultimate sophistication."</div>
+                  <div className="flex items-center gap-2 text-stone-500 text-xs font-mono uppercase tracking-widest">
+                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                    System Online
+                  </div>
+               </div>
             </div>
-          )}
-          <Form method="post" className="space-y-6">
-            {useActionData<typeof action>()?.error && (
-              <div
-                className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-                role="alert"
-              >
-                <span className="block sm:inline">
-                  {useActionData<typeof action>()?.error}
-                </span>
-              </div>
-            )}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition"
-                placeholder="contoh@email.com"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-slate-700 mb-1"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                name="password"
-                required
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition"
-                placeholder="********"
-              />
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-slate-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-slate-900"
-                >
-                  Ingat saya
-                </label>
-              </div>
-              <Link
-                to="/forgot-password"
-                className="text-sm font-medium text-orange-600 hover:text-orange-500"
-              >
-                Lupa Kata Sandi?
-              </Link>
-            </div>
-            <button
-              type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-orange-500 hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition"
-            >
-              Masuk
-            </button>
-          </Form>
-          <div className="mt-6 text-center">
-            <p className="text-sm text-slate-600">
-              Belum punya akun?{" "}
-              <Link
-                to="/register"
-                className="font-medium text-orange-600 hover:text-orange-500"
-              >
-                Daftar Sekarang
-              </Link>
+          </div>
+
+          {/* Bottom Text */}
+          <div className="relative z-10">
+            <p className="text-stone-500 font-serif italic text-lg">
+              Trusted by 10,000+ teams to collect better data.
             </p>
           </div>
         </div>
-      </main>
 
-      <AuthFooter />
+        {/* Right Panel: Login Form */}
+        <div className="w-full md:w-1/2 lg:w-[55%] bg-white flex flex-col justify-center items-center p-8 md:p-16 relative">
+           
+           {/* Mobile Logo (Only visible on small screens) */}
+           <div className="absolute top-8 left-8 md:hidden flex items-center gap-3">
+            <div className="w-8 h-8 bg-stone-900 rounded-none flex items-center justify-center text-[#fdfbf7] font-serif font-bold">P</div>
+            <span className="text-xl font-serif font-bold text-stone-900">PaperFill</span>
+           </div>
+
+           <div className="w-full max-w-md space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              <div className="text-center md:text-left">
+                <h1 className="text-4xl md:text-5xl font-serif font-bold text-stone-900 mb-4 tracking-tight">Welcome back.</h1>
+                <p className="text-stone-500 text-lg font-light">
+                  Please enter your details to sign in.
+                </p>
+              </div>
+
+              <form onSubmit={handleLogin} className="space-y-6">
+                 {/* Email Input */}
+                 <div className="space-y-2 group">
+                   <label className="block text-xs font-mono uppercase tracking-widest text-stone-500 group-focus-within:text-stone-900 transition-colors">Email Address</label>
+                   <input 
+                     type="email" 
+                     value={email}
+                     onChange={(e) => setEmail(e.target.value)}
+                     className="w-full bg-transparent border-b border-stone-300 py-3 text-xl font-serif text-stone-900 placeholder:text-stone-300 focus:outline-none focus:border-stone-900 transition-colors"
+                     placeholder="name@company.com"
+                   />
+                 </div>
+
+                 {/* Password Input */}
+                 <div className="space-y-2 group">
+                   <div className="flex justify-between items-center">
+                     <label className="block text-xs font-mono uppercase tracking-widest text-stone-500 group-focus-within:text-stone-900 transition-colors">Password</label>
+                     <a href="/forgot-password" className="text-xs font-mono text-stone-400 hover:text-stone-900 underline decoration-1 underline-offset-2">Forgot?</a>
+                   </div>
+                   <div className="relative">
+                     <input 
+                       type={showPassword ? "text" : "password"} 
+                       value={password}
+                       onChange={(e) => setPassword(e.target.value)}
+                       className="w-full bg-transparent border-b border-stone-300 py-3 text-xl font-serif text-stone-900 placeholder:text-stone-300 focus:outline-none focus:border-stone-900 transition-colors pr-10"
+                       placeholder="••••••••"
+                     />
+                     <button 
+                       type="button"
+                       onClick={() => setShowPassword(!showPassword)}
+                       className="absolute right-0 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-900 transition-colors"
+                     >
+                       {showPassword ? <EyeOff size={20} strokeWidth={1.5} /> : <Eye size={20} strokeWidth={1.5} />}
+                     </button>
+                   </div>
+                 </div>
+
+                 {/* Submit Button */}
+                 <button 
+                   type="submit" 
+                   disabled={isLoading || !email || !password}
+                   className="w-full bg-stone-900 text-[#fdfbf7] py-4 px-6 font-bold text-lg hover:bg-stone-800 disabled:opacity-70 disabled:cursor-not-allowed transition-all shadow-[4px_4px_0px_0px_rgba(28,25,23,0.2)] active:translate-y-0.5 active:shadow-none flex items-center justify-center gap-2 group"
+                 >
+                   {isLoading ? (
+                     <span className="animate-pulse">Signing in...</span>
+                   ) : (
+                     <>
+                       Sign in <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                     </>
+                   )}
+                 </button>
+              </form>
+
+              {/* Social Login */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-stone-200"></div>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-4 text-stone-400 font-mono tracking-widest">Or continue with</span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <button className="flex items-center justify-center gap-2 px-4 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-colors bg-transparent text-stone-600 font-medium group">
+                   <Command size={18} /> Google
+                </button>
+                <button className="flex items-center justify-center gap-2 px-4 py-3 border border-stone-300 hover:border-stone-900 hover:bg-stone-50 transition-colors bg-transparent text-stone-600 font-medium group">
+                   <Github size={18} /> GitHub
+                </button>
+              </div>
+
+              <p className="text-center text-stone-500 text-sm">
+                Don't have an account? <a href="/register" className="text-stone-900 font-bold underline decoration-1 underline-offset-2 hover:text-orange-600 transition-colors">Sign up for free</a>
+              </p>
+           </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
-function AuthNavbar() {
-  return (
-    <header className="bg-white shadow-sm sticky top-0 z-40">
-      <div className="container mx-auto flex h-20 items-center justify-between px-6">
-        <Link to="/">
-          <img
-            src="/logo-pestaria.png"
-            alt="Logo Pestaria"
-            className="h-32 w-auto"
-          />
-        </Link>
-        <Link
-          to="/"
-          className="flex items-center gap-2 text-slate-600 hover:text-orange-500 transition-colors"
-        >
-          <ArrowLeft size={16} /> Kembali ke Beranda
-        </Link>
-      </div>
-    </header>
-  );
-}
-
-function AuthFooter() {
-  return (
-    <footer className="bg-slate-200 text-slate-600">
-      <div className="container mx-auto px-6 py-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-        <p>&copy; {new Date().getFullYear()} Pestaria. All rights reserved.</p>
-      </div>
-    </footer>
-  );
-}
+export default LoginPage;
