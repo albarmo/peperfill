@@ -1,0 +1,210 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String             @id @default(cuid())
+  name          String?
+  email         String             @unique
+  phone         String?            @unique
+  password      String?
+  role          String?
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  passwordResets PasswordReset[]
+  userProviders  UserProvider[]
+  invitations    Invitation[]       @relation("UserInvitations")
+  cartItems      CartItem[]
+  wishlistItems  WishlistItem[]
+  transactions   Transaction[]
+}
+
+model PasswordReset {
+  id         String   @id @default(cuid())
+  userId     String
+  token      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+}
+
+model UserProvider {
+  id                 String   @id @default(cuid())
+  userId             String
+  provider           String
+  providerAccountId  String
+  accessToken        String?
+  refreshToken       String?
+  expiresAt          DateTime?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  themes      Theme[]
+}
+
+model Tag {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  themeTags ThemeTag[]
+}
+
+model Theme {
+  id            String      @id @default(cuid())
+  name          String      @unique
+  label         String
+  previewUrl    String?
+  categoryId    String?
+  styles        Json?
+  price         Float?
+  activeMonths  Int?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  category      Category?   @relation(fields: [categoryId], references: [id])
+  invitations   Invitation[]
+  invitationVersions InvitationVersion[]
+  themeTags     ThemeTag[]
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
+}
+
+model ThemeTag {
+  themeId String
+  tagId   String
+
+  theme   Theme @relation(fields: [themeId], references: [id])
+  tag     Tag   @relation(fields: [tagId], references: [id])
+
+  @@id([themeId, tagId])
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String
+  themeId   String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  theme     Theme    @relation(fields: [themeId], references: [id])
+}
+
+model WishlistItem {
+  id        String   @id @default(cuid())
+  userId    String
+  themeId   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id])
+  theme     Theme    @relation(fields: [themeId], references: [id])
+}
+
+model Transaction {
+  id                 String   @id @default(cuid())
+  userId             String
+  items              Json
+  totalAmount        Float 
+  status             String   @default("pending") // pending, paid, failed, cancelled
+  paymentMethod      String?
+  paymentExpiredAt   DateTime?
+  paidAt             DateTime?
+  paidBy             String?
+  transactionData    Json?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  user               User     @relation(fields: [userId], references: [id])
+}
+
+model Invitation {
+  id           String      @id @default(cuid())
+  title        String
+  bride        String
+  groom        String
+  slug         String      @unique
+  description  String?
+  eventDate    DateTime
+  location     String
+  themeId      String
+  creatorId    String @default("admin-uuid")
+  configData    Json?
+  expiredAt    DateTime?
+  url          String?
+  isPublished  Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  theme        Theme?      @relation(fields: [themeId], references: [id])
+  creator      User        @relation("UserInvitations", fields: [creatorId], references: [id])
+  guests       Guest[]
+  messages     Message[]
+  versions     InvitationVersion[]
+}
+
+model InvitationVersion {
+  id            String      @id @default(cuid())
+  invitationId  String
+  versionNumber Int
+  title         String
+  bride         String
+  groom         String
+  description   String?
+  eventDate     DateTime
+  location      String
+  themeId       String
+  configData     Json?
+  staticHtml    String?
+  publishedAt   DateTime?
+  createdAt     DateTime    @default(now())
+
+  invitation    Invitation  @relation(fields: [invitationId], references: [id])
+  theme         Theme?      @relation(fields: [themeId], references: [id])
+}
+
+model Guest {
+  id           String     @id @default(cuid())
+  name         String
+  message      String?
+  guestCount   Int?       @default(1)
+  status       String
+  invitationId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  invitation   Invitation @relation(fields: [invitationId], references: [id])
+}
+
+model Message {
+  id           String     @id @default(cuid())
+  senderName   String
+  senderEmail  String
+  content      String
+  status       String
+  invitationId String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  invitation   Invitation @relation(fields: [invitationId], references: [id])
+}

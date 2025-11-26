@@ -1,0 +1,56 @@
+{
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.server/**/*.ts",
+    "**/*.server/**/*.tsx",
+    "**/*.client/**/*.ts",
+    "**/*.client/**/*.tsx"
+  ],
+  "compilerOptions": {
+    /* =====================
+       🔧 Target & Module
+       ===================== */
+    "target": "ES2022",                // modern output (async/await native)
+    "module": "ESNext",                // biar Remix bisa handle bundling
+    "moduleResolution": "Bundler",     // cocok untuk Vite + Remix
+
+    /* =====================
+       📚 Environment Support
+       ===================== */
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+
+    /* Remix & Node support types */
+    "types": [
+      "@remix-run/node",
+      "@remix-run/react",
+      "vite/client",
+      "node"                         // ⬅️ penting! biar fs, path, process, Buffer dikenali
+    ],
+
+    /* =====================
+       ⚙️ React & JSX
+       ===================== */
+    "jsx": "react-jsx",
+
+    /* =====================
+       🧩 Interop & Safety
+       ===================== */
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "ignoreDeprecations": "6.0",
+
+    /* =====================
+       🧭 Path Alias
+       ===================== */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./app/*"]
+    }
+  }
+}

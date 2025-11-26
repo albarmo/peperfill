@@ -1,0 +1,106 @@
+/* container-preview.css */
+/* ============================================================
+   🎨 Container Queries untuk konten di dalam Virtual Device
+   Breakpoints mengikuti Tailwind: sm, md, lg, xl, 2xl
+   ============================================================ */
+
+/* Aktifkan container query di root Virtual Device */
+.virtual-device {
+  container-type: inline-size;
+  container-name: preview;
+  font-family: "Inter", system-ui, sans-serif;
+  line-height: 1.6;
+  color: #222;
+  padding: 1.5rem;
+  background-color: #fff;
+}
+
+/* Default scaling (fallback) */
+.virtual-device h1,
+.virtual-device .title {
+  font-size: clamp(1rem, 2vw + 0.5rem, 2rem);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.virtual-device p {
+  font-size: clamp(0.875rem, 1.2vw + 0.25rem, 1.125rem);
+  color: #555;
+}
+
+/* sm: <640px */
+@container preview (max-width: 639px) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 1.125rem !important; /* text-base */
+  }
+  .virtual-device p {
+    font-size: 0.875rem !important; /* text-sm */
+  }
+}
+
+/* md: 640px - 767px */
+@container preview (min-width: 640px) and (max-width: 767px) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 1.25rem !important; /* text-lg */
+  }
+  .virtual-device p {
+    font-size: 1rem !important; /* text-base */
+  }
+}
+
+/* lg: 768px - 1023px */
+@container preview (min-width: 768px) and (max-width: 1023px) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 1.5rem !important; /* text-xl */
+  }
+  .virtual-device p {
+    font-size: 1.125rem !important; /* text-lg */
+  }
+}
+
+/* xl: 1024px - 1279px */
+@container preview (min-width: 1024px) and (max-width: 1279px) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 2rem !important; /* text-2xl */
+  }
+  .virtual-device p {
+    font-size: 1.25rem !important; /* text-xl */
+  }
+}
+
+/* 2xl: 1280px - 1535px */
+@container preview (min-width: 1280px) and (max-width: 1535px) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 2.25rem !important; /* text-3xl */
+  }
+  .virtual-device p {
+    font-size: 1.5rem !important; /* text-2xl */
+  }
+}
+
+/* 3xl: >1536px */
+@container preview (min-width: 1536px) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 3rem !important; /* text-4xl */
+  }
+  .virtual-device p {
+    font-size: 1.875rem !important; /* text-3xl */
+  }
+}
+
+/* 🪄 Browser fallback (jika tidak support container query) */
+@supports not (container-type: inline-size) {
+  .virtual-device h1,
+  .virtual-device .title {
+    font-size: 1.5rem;
+  }
+  .virtual-device p {
+    font-size: 1rem;
+  }
+}
